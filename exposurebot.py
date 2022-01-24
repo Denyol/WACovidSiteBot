@@ -48,6 +48,7 @@ class ExposureSiteBot:
 
     @staticmethod
     def simple_date(date: datetime.datetime) -> str:
+        """Returns the date in the form 'dd/mm/YYYY'"""
         return date.strftime("%d/%m/%Y")
 
     @staticmethod
@@ -56,14 +57,13 @@ class ExposureSiteBot:
             json_file = json.load(file_)
 
             history = json_file["history"]
-            json_file["history"] = {key:val for key, val in history.items() 
-                    if str(val) != tweet_id}
+            json_file["history"] = {key: val for key, val in history.items()
+                                    if str(val) != tweet_id}
 
             file_.seek(0)
 
             json.dump(json_file, file_, indent=2)
             file_.truncate()
-
 
     def __init__(self):
         self.recent_updated = datetime.datetime(2000, 1, 1)
@@ -170,7 +170,7 @@ def run():
 
 
 if __name__ == '__main__':
-    
+
     args = sys.argv
 
     if len(args) > 1:

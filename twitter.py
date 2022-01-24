@@ -54,6 +54,7 @@ class Twitter:
         return r.json()
 
     def delete(self, *tweet_ids):
+        """Deletes the specified tweet ids from Twitter and the post history JSON file."""
         url = "https://api.twitter.com/2/tweets/"
 
         for t_id in tweet_ids:

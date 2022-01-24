@@ -25,17 +25,25 @@ class ExposureSite:
     times: str
     suburb: str
     address: str
-    update_date: datetime
+    update_date: datetime.datetime
+
+    def __init__(self, times: str, suburb: str, address: str, update_date: datetime.datetime):
+        self.times = times.strip()
+        self.suburb = suburb.strip()
+        self.address = address.strip()
+        self.update_date = update_date
 
     def __bytes__(self):
         return bytes(self.__str__(), "utf-8")
 
     def __str__(self):
-        return self.times.strip() + "\n" + (
-            ", ".join([self.suburb.strip(), self.address.strip(), "Updated: " + self.update_date.strftime("%d/%m/%Y")]))
+        return self.times + "\n" + (
+            ", ".join([self.suburb, self.address, "Updated: " + self.update_date.strftime("%d/%m/%Y")]))
 
     def hash_(self) -> str:
+        """Returns a md5 hash representation of the object."""
         return md5(self.__bytes__()).hexdigest()
 
     def toJSON(self):
+        """Returns a JSON string representation of the object."""
         return json.dumps(self.__dict__)
