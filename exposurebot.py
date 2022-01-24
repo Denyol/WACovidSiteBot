@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 
 import requests
@@ -7,6 +9,7 @@ from exposuresite import ExposureSite
 from rich.console import Console
 from rich.table import Table
 import datetime
+import sys
 
 __copyright__ = "Copyright 2022 Daniel Tucker"
 __license__ = """
@@ -46,6 +49,21 @@ class ExposureSiteBot:
     @staticmethod
     def simple_date(date: datetime.datetime) -> str:
         return date.strftime("%d/%m/%Y")
+
+    @staticmethod
+    def remove_saved_post(tweet_id: str):
+        with open("post_history.json", "r+") as file_:
+            json_file = json.load(file_)
+
+            history = json_file["history"]
+            json_file["history"] = {key:val for key, val in history.items() 
+                    if str(val) != tweet_id}
+
+            file_.seek(0)
+
+            json.dump(json_file, file_, indent=2)
+            file_.truncate()
+
 
     def __init__(self):
         self.recent_updated = datetime.datetime(2000, 1, 1)
@@ -152,4 +170,14 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    
+    args = sys.argv
+
+    if len(args) > 1:
+        if args[1] == "delete":
+            if len(args) < 3:
+                print("Incorrect syntax! Insert post ID.")
+            else:
+                twitter.Twitter().delete(args[2])
+    else:
+        run()

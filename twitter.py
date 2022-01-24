@@ -3,6 +3,7 @@ import json
 import requests
 from requests_oauthlib import OAuth1
 from rich import print
+import exposurebot
 
 __copyright__ = "Copyright 2022 Daniel Tucker"
 __license__ = """
@@ -52,10 +53,12 @@ class Twitter:
 
         return r.json()
 
-    def delete(self, tweet_ids: list):
+    def delete(self, *tweet_ids):
         url = "https://api.twitter.com/2/tweets/"
 
         for t_id in tweet_ids:
-            print("Deleting", t_id)
+            print("Deleting: ", t_id)
             r = requests.delete(url + t_id, auth=self.header)
             print(r.text, r.status_code)
+            if r.status_code == 200:
+                exposurebot.ExposureSiteBot.remove_saved_post(t_id)
