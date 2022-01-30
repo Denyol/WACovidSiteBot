@@ -119,9 +119,6 @@ class ExposureSiteBot:
             "https://www.healthywa.wa.gov.au/Articles/A_E/Coronavirus/Locations-visited-by-confirmed-cases")
         soup = BeautifulSoup(r.text, 'html.parser')
 
-        site_updated = soup.find(id="phrightcontentbelow_0_lblLastReviewed").next_sibling.text.strip()
-        self.console.print("[red]Site updated:", site_updated)
-
         location_blocks = soup.find_all(id="mobileLocationList")
 
         table = Table(title="Exposure Sites", show_lines=True)
