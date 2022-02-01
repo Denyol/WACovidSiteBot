@@ -86,11 +86,14 @@ class ExposureSiteBot:
 
                 tweet_text = str(site) + "\n" + site.hash_() + "\n" + "#WA #WACOVID #Perth"
 
-                response = tw.tweet(tweet_text[0:250])
-
                 try:
+                    response = tw.tweet(tweet_text[0:250])
+
                     post_history[site.hash_()] = response["data"]["id"]
                     last_hash = site.hash_()
+                except twitter.TweetError as e:
+                    self.console.print("[red]Error occured: ", e)
+                    self.exposure_sites.remove(site)
                 except:
                     self.console.print("[red]Error occurred!")
                     self.console.print("[red]", response.get("errors"))

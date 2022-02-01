@@ -21,6 +21,9 @@ __license__ = """
     See the License for the specific language governing permissions and
     limitations under the License."""
 
+class TweetError(Exception):
+    pass
+
 
 class Twitter:
     tweet_url = "https://api.twitter.com/2/tweets"
@@ -50,6 +53,9 @@ class Twitter:
 
         r = requests.post(Twitter.tweet_url, json=data, auth=self.header)
         print("[bold blue]Tweet posted:", r.content)
+
+        if r.json().get("status") == 403:
+            raise TweetError("Duplicate tweet: " + text)
 
         return r.json()
 
